@@ -4,6 +4,7 @@ const router = require("express").Router()
 module.exports.signUp_post = async (req,res)=>{
     const {username, phone_number, email} = req.body;
     try{
+
         const user = await User.create({username: username, phone_number:phone_number, email:email});
         res.status(200).json({id:user._id})
 
