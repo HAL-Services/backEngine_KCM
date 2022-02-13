@@ -7,6 +7,6 @@ router.get('/',(req,res)=>{
 });
 
 router.post("/signup", authController.signUp_post);
-router.get('/send-otp', otpController.send_otp)
+router.post('/send-otp', otpController.send_otp)
 
 module.exports=router
