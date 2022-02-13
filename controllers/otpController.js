@@ -23,8 +23,28 @@ module.exports.send_otp = (req,res)=>{
     //     to: phone
     // }).then((message)=>console.log(message)).catch((err)=>console.log(err))
 
-    //commented the code so that trial account limit does not exceed
+    // commented the code so that trial account limit does not exceed
 
     res.status(200).send({phone, hash:fullHash});
 
+}
+
+module.exports.verify_otp = (req, res)=>{
+    const phone = req.body.phone;
+    const hash = req.body.hash;
+    const otp = req.body.otp;
+    let [hashValue, expires] = hash.split('.');
+    let now = Date.now();
+
+    if (now > parseInt(expires)) {
+        return res.status(504).send({ msg: 'Timeout. Please try again' });
+    }
+    let data = `${phone}.${otp}.${expires}`;
+    let newCalculatedHash = crypto.createHmac('sha256', smsKey).update(data).digest('hex');
+
+    if (newCalculatedHash === hashValue){
+        return res.status(202).send({msg:'user confirmed', verification:true});
+    }else{
+        return res.status(401).send({msg:'Incorrect OTP', verification:false});
+    }
 }
