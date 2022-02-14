@@ -11,7 +11,7 @@ const client = require('twilio')(accountSid, authToken)
 module.exports.send_otp = (req,res)=>{
     const phone = req.body.phone;
     const otp = Math.floor(100000 + Math.random()*900000);
-    const ttl = 2*60*1000;
+    const ttl = 4*60*1000;
     const expires = Date.now()+ttl;
     const data = `${phone}.${otp}.${expires}`;
     const hash = crypto.createHmac('sha256', smsKey).update(data).digest('hex');
@@ -25,7 +25,7 @@ module.exports.send_otp = (req,res)=>{
 
     // commented the code so that trial account limit does not exceed
 
-    res.status(200).send({phone, hash:fullHash});
+    res.status(200).send({phone, hash:fullHash, otp:otp});
 
 }
 
