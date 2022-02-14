@@ -10,7 +10,7 @@ module.exports.all_users = async (req, res)=>{
         res.status(200).send({data:data})
     }
     else{
-        res.status(500).send({msg:"Invalid querry", data:[]})
+        res.status(500).send({msg:"Invalid query", data:[]})
     }
 
 }
