@@ -11,6 +11,7 @@ mongoose.connect(
   "mongodb+srv://halservices:harshluvjeet10@cluster0.o0zhh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
   { useNewUrlParser: true, useUnifiedTopology: true }
 );
+
 app.use("/", route);
 
 app.listen(5000, (req, res) => {
