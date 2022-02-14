@@ -1,8 +1,9 @@
 const express=require('express')
 const router=express.Router()
+const userDataController = require('../controllers/userDataController')
 
-router.get('/', (req,res)=>
-    res.status(200).send({msg:"Successfully logged into users"})
-)
+
+router.get('/all/', userDataController.all_users);
+
 
 module.exports=router
