@@ -4,9 +4,11 @@ const cors = require("cors");
 const route = require("./routes/routes.js");
 const userRoutes = require('./routes/userRoutes.js')
 const car_route=require('./routes/car_route')
+const morgan = require('morgan')
 
 const app = express();
 app.use(cors());
+app.use(morgan('tiny'))
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 mongoose.connect(
