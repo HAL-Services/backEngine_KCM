@@ -14,7 +14,7 @@ mongoose.connect(
 
 
 app.use("/", route);
-app.use('/car',car_route)
+app.use('/car',car_route);
 app.listen(5000, (req, res) => {
   console.log("Server is up and running at Port 5000");
 });
