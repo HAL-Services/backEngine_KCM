@@ -8,8 +8,10 @@ const carsSchema = new mongoose.Schema(
     car_number: {
       type: String,
       required: true,
+      unique: true,
+      trim: true,
     },
-    username: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    owner: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   },
   { timestamps: true }
 );
