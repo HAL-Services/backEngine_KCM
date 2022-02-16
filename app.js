@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const route = require("./routes/routes.js");
-
+const car_route=require('./routes/car_route')
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -14,7 +14,7 @@ mongoose.connect(
 
 
 app.use("/", route);
-
+app.use('/car',car_route)
 app.listen(5000, (req, res) => {
   console.log("Server is up and running at Port 5000");
 });
