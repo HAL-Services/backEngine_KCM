@@ -11,6 +11,6 @@ router.get('/',(req,res)=>{
 router.post("/signup", authController.signUp_post);
 router.post('/send-otp', otpController.send_otp);
 router.post('/verify-otp', otpController.verify_otp);
-
+router.get('/stats/', authController.Stats)
 
 module.exports=router
