@@ -1,4 +1,5 @@
 const User = require("../models/user_schema");
+const Cars = require("../models/cars_schema");
 const router = require("express").Router();
 
 module.exports.signUp_post = async (req, res) => {
@@ -14,3 +15,15 @@ module.exports.signUp_post = async (req, res) => {
     res.status(400).send({ error: err.message });
   }
 };
+
+
+module.exports.Stats = async (req,res) =>{
+  try{
+    const users = await User.countDocuments();
+    const cars = await Cars.countDocuments();
+    res.status(200).send({data:{user:users, car: cars}, data_found: true})
+
+  }catch (err){
+    res.status(400).send({ error: err.message });
+  }
+}
