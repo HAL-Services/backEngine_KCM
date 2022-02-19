@@ -4,6 +4,6 @@ const userDataController = require('../controllers/userDataController')
 
 
 router.get('/all/', userDataController.all_users);
-router.get('/phone/', userDataController.userPhone);
+router.post('/phone/', userDataController.userPhone);
 
 module.exports=router
