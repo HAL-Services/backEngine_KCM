@@ -11,7 +11,7 @@ const carsSchema = new mongoose.Schema(
       unique: true,
       trim: true,
     },
-    owner: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    owner: { type: mongoose.Schema.Types.Object, ref: "User" },
   },
   { timestamps: true }
 );

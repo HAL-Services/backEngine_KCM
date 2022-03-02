@@ -52,7 +52,7 @@ module.exports.post_cars = async (req, res) => {
         model,
         car_number,
       });
-      car.owner = user;
+      car.owner = user._doc;
       car.save();
       res.status(200).send({ data: car._doc, data_found: true });
     } else {
