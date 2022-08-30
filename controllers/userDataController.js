@@ -15,6 +15,7 @@ module.exports.all_users = async (req, res)=>{
 
 }
 
+
 module.exports.userPhone = async (req, res) =>{
     const phone = req.body.phone;
     const query = await User.findOne({phone_number:phone});

@@ -2,28 +2,42 @@ const User = require("../models/user_schema");
 const Cars = require("../models/cars_schema");
 const router = require("express").Router();
 
+// for signup
 module.exports.signUp_post = async (req, res) => {
-  const { username, phone_number, email } = req.body;
+  const { username, mobile, email, password } = req.body;
   try {
     const user = await User.create({
-      username: username,
-      phone_number: phone_number,
-      email: email,
+      username,
+      mobile,
+      email,
+      password,
     });
-    res.status(200).json({ id: user._id });
+    res.status(201).json({ id: user._id });
   } catch (err) {
     res.status(400).send({ error: err.message });
   }
 };
 
-
-module.exports.Stats = async (req,res) =>{
-  try{
-    const users = await User.countDocuments();
-    const cars = await Cars.countDocuments();
-    res.status(200).send({data:{user:users, car: cars}, data_found: true})
-
-  }catch (err){
+// for login
+module.exports.login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findByCredentials(email, password);
+    res.send(user);
+  } catch (err) {
     res.status(400).send({ error: err.message });
   }
-}
+};
+
+// for admin getting all users
+module.exports.Stats = async (req, res) => {
+  try {
+    const users = await User.countDocuments();
+    const cars = await Cars.countDocuments();
+    res
+      .status(200)
+      .send({ data: { user: users, car: cars }, data_found: true });
+  } catch (err) {
+    res.status(400).send({ error: err.message });
+  }
+};
