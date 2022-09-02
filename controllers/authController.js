@@ -4,7 +4,12 @@ const router = require("express").Router();
 // for signup
 module.exports.signUp_post = async (req, res) => {
   const { username, mobile, email, password } = req.body;
+  const userExists = await User.findOne({ email });
   try {
+    if (userExists) {
+      res.status(400);
+      throw new Error("User Already Exists");
+    }
     const user = await User.create({
       username,
       mobile,
@@ -40,4 +45,3 @@ module.exports.logout = async (req, res) => {
     req.status(500).send();
   }
 };
-
