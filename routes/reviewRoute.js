@@ -7,5 +7,8 @@ router.post("/reviews/create", reviewController.createReview);
 router.post("/reviews/update", auth, reviewController.updateReview);
 router.get("/reviews/filtered", reviewController.getReviews);
 router.get("/reviews/all", auth, reviewController.getAllReviews);
+router.get("/reviews/pending", reviewController.getPendingReviews);
+router.delete("/reviews/delete", reviewController.deleteReview);
+
 
 module.exports = router;

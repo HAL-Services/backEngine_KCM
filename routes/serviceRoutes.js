@@ -11,5 +11,4 @@ router.get(
   auth,
   serviceController.getPendingServiceByUser
 );
-
 module.exports = router;
