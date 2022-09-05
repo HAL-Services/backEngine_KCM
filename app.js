@@ -1,23 +1,38 @@
+// importing packages
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const route = require("./routes/routes.js");
 const morgan = require("morgan");
-const { notFound, errorHandler } = require("./middleware/errorMiddleware.js");
+const env = require("dotenv");
+// importing routes
+const authRoutes = require("./routes/authRoutes");
+const reviewRoutes = require("./routes/reviewRoute");
+const userRoutes = require("./routes/userRoutes");
+const serviceRoutes = require("./routes/serviceRoutes");
 
+env.config();
 const app = express();
 app.use(cors());
-
 app.use(morgan("tiny"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-mongoose.connect(
-  "mongodb+srv://halservices:harshluvjeet10@cluster0.o0zhh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
-  { useNewUrlParser: true, useUnifiedTopology: true }
-);
+const PORT = process.env.PORT || 5000;
+try {
+  mongoose.connect(
+    "mongodb+srv://halservices:harshluvjeet10@cluster0.o0zhh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+    { useNewUrlParser: true, useUnifiedTopology: true }
+  );
+} catch (error) {
+  console.log(`Error:${error.message}`);
+  process.exit();
+}
+// using routes
+app.use(authRoutes);
+app.use(reviewRoutes);
+app.use(serviceRoutes);
+app.use(userRoutes);
 
-app.use("/", route);
-
-app.listen(5000, (req, res) => {
-  console.log("Server is up and running at Port 5000");
+//
+app.listen(PORT, (req, res) => {
+  console.log(`Server is running on PORT ${PORT}`);
 });

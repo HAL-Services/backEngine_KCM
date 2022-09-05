@@ -24,14 +24,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    tokens: [
-      {
-        token: {
-          type: String,
-          required: true,
-        },
-      },
-    ],
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
@@ -47,8 +43,11 @@ userSchema.methods.toJSON = function () {
 
 userSchema.methods.generateAuthToken = async function () {
   const user = this;
-  const token = jwt.sign({ _id: user._id.toString() }, "secret");
-  user.tokens = user.tokens.concat({ token });
+  const token = jwt.sign(
+    { _id: user._id.toString(), isAdmin: user.isAdmin },
+    "secret"
+  );
+  user.token = token;
   await user.save();
   return token;
 };
