@@ -30,6 +30,10 @@ module.exports.createService = async (req, res) => {
 };
 // update service status
 module.exports.updateServiceStatus = async (req, res) => {
+  if (!req.user.isAdmin) {
+    res.status(403).json("Access Denied");
+    return;
+  }
   try {
     const { id, booking } = req.body;
     const service = await Service.findOneAndUpdate(
@@ -48,6 +52,10 @@ module.exports.updateServiceStatus = async (req, res) => {
 
 // get all pending services
 module.exports.getPendingServices = async (req, res) => {
+  if (!req.user.isAdmin) {
+    res.status(403).json("Access Denied");
+    return;
+  }
   try {
     const pendingServices = await Service.find({ booking: "Pending" });
 

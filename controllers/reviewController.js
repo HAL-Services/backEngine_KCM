@@ -13,6 +13,10 @@ module.exports.createReview = async (req, res) => {
 
 // update reivew status
 module.exports.updateReview = async (req, res) => {
+  if (!req.user.isAdmin) {
+    res.status(403).json("Access Denied");
+    return;
+  }
   try {
     const { id, status } = req.body;
     const review = await Review.findOneAndUpdate(
@@ -35,5 +39,19 @@ module.exports.getReviews = async (req, res) => {
     res.status(200).send(reviews);
   } catch (error) {
     res.status(400).send({ error: error.message });
+  }
+};
+
+// to get all reviews
+module.exports.getAllReviews = async (req, res) => {
+  if (!req.user.isAdmin) {
+    res.status(403).json("Access Denined");
+    return;
+  }
+  try {
+    const allReviews = await Review.find();
+    res.status(200).send(allReviews);
+  } catch (error) {
+    res.status(404).send({ error: error.message, message: "No reviews found" });
   }
 };
