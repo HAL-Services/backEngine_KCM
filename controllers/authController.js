@@ -28,8 +28,9 @@ module.exports.login = async (req, res) => {
     const { email } = req.body;
     const user = await User.findByCredentials(email, req.body.password);
     const token = await user.generateAuthToken();
-    const { password, createdAt, updatedAt, isAdmin, id, __v, ...others } =
+    const { password, createdAt, updatedAt, isAdmin, __v, ...others } =
       user._doc;
+
     res.send({ ...others, token });
   } catch (err) {
     res.status(400).send({ error: err.message });
