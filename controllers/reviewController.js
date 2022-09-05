@@ -32,6 +32,18 @@ module.exports.updateReview = async (req, res) => {
   }
 };
 
+// to delete reviews
+module.exports.deleteReview = async (req, res) => {
+  try {
+    const { id } = req.body;
+    const deleteReview = await Review.findByIdAndDelete(id);
+    if (!deleteReview) return res.status(400).send();
+    return res.status(200).send(deleteReview);
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+};
+
 // to get all the legit reviews
 module.exports.getReviews = async (req, res) => {
   try {
@@ -39,6 +51,16 @@ module.exports.getReviews = async (req, res) => {
     res.status(200).send(reviews);
   } catch (error) {
     res.status(400).send({ error: error.message });
+  }
+};
+
+// to get pending reviews
+module.exports.getPendingReviews = async (req, res) => {
+  try {
+    const reviews = await Review.find({ status: "false" });
+    res.status(200).send(reviews);
+  } catch (error) {
+    res.status(400).json(error.message);
   }
 };
 
