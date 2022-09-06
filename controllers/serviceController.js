@@ -108,7 +108,7 @@ module.exports.cancleService = async (req, res) => {
 // search by user
 module.exports.getPendingServiceByUser = async (req, res) => {
   try {
-    const { email } = req.body;
+    const { email } = req.user;
     const allServices = await Service.find({ email });
     res.status(200).send({ allServices });
   } catch (error) {
