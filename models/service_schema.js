@@ -9,6 +9,10 @@ const serviceSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    mobile: {
+      type: String,
+      required: true,
+    },
     carNumber: {
       type: String,
       required: true,
