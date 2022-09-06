@@ -34,11 +34,15 @@ module.exports.updateReview = async (req, res) => {
 
 // to delete reviews
 module.exports.deleteReview = async (req, res) => {
+  if (!req.user.isAdmin) {
+    res.status(403).json("ACCESS DENIED");
+    return;
+  }
   try {
     const { id } = req.body;
     const deleteReview = await Review.findByIdAndDelete(id);
     if (!deleteReview) return res.status(400).send();
-    return res.status(200).send(deleteReview);
+    else return res.status(200).send(deleteReview);
   } catch (error) {
     res.status(400).json(error.message);
   }
@@ -56,24 +60,14 @@ module.exports.getReviews = async (req, res) => {
 
 // to get pending reviews
 module.exports.getPendingReviews = async (req, res) => {
+  if (!req.user.isAdmin) {
+    res.status(403).json("ACCESS DENIED");
+    return;
+  }
   try {
     const reviews = await Review.find({ status: "false" });
     res.status(200).send(reviews);
   } catch (error) {
     res.status(400).json(error.message);
-  }
-};
-
-// to get all reviews
-module.exports.getAllReviews = async (req, res) => {
-  if (!req.user.isAdmin) {
-    res.status(403).json("Access Denined");
-    return;
-  }
-  try {
-    const allReviews = await Review.find();
-    res.status(200).send(allReviews);
-  } catch (error) {
-    res.status(404).send({ error: error.message, message: "No reviews found" });
   }
 };

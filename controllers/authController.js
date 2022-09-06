@@ -25,6 +25,7 @@ module.exports.signUp_post = async (req, res) => {
 // for login
 module.exports.login = async (req, res) => {
   try {
+    
     const { email } = req.body;
     const user = await User.findByCredentials(email, req.body.password);
     const token = await user.generateAuthToken();
@@ -34,6 +35,21 @@ module.exports.login = async (req, res) => {
     res.send({ ...others, token });
   } catch (err) {
     res.status(400).send({ error: err.message });
+  }
+};
+
+// login for admin
+module.exports.adminLogin = async (req, res) => {
+  try {
+    const user = await User.findByCredentials(
+      req.body.email,
+      req.body.password
+    );
+    const token = await user.generateAuthToken();
+    const { password, createdAt, updatedAt, __v, ...others } = user._doc;
+    res.send({ ...others, token });
+  } catch (error) {
+    res.status(400).send("ACCESS DENIED");
   }
 };
 
