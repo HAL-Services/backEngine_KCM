@@ -5,7 +5,7 @@ module.exports.createService = async (req, res) => {
   try {
     const {
       email,
-      address,
+      location,
       carNumber,
       carModel,
       mobile,
@@ -16,7 +16,7 @@ module.exports.createService = async (req, res) => {
     const service = await Service.create({
       email,
       username,
-      address,
+      location,
       carNumber,
       carModel,
       mobile,
@@ -59,12 +59,53 @@ module.exports.getPendingServices = async (req, res) => {
   try {
     const pendingServices = await Service.find({ booking: "Pending" });
 
-    res.status(200).send({ pendingServices });
+    res.status(200).send(pendingServices);
   } catch (error) {
     res.status(400).send({ error: error.message });
   }
 };
+// get all active services
+module.exports.getActiveServices = async (req, res) => {
+  if (!req.user.isAdmin) {
+    res.status(403).json("ACCESS DENIED");
+    return;
+  }
+  try {
+    const activeSerivces = await Service.find({ booking: "Active" });
+    res.status(200).send(activeSerivces);
+  } catch (erro) {
+    res.status(400).json(error.message);
+  }
+};
+// get completed services
+module.exports.getCompletedServices = async (req, res) => {
+  if (!req.user.isAdmin) {
+    res.status(403).json("ACCESS DENIED");
+    return;
+  }
+  try {
+    const completedServices = await Service.find({ booking: "Completed" });
+    res.status(200).send(completedServices);
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+};
+// cancel a service
+module.exports.cancleService = async (req, res) => {
+  if (!req.user.isAdmin) {
+    res.status(403).json("ACCESS DENIED");
+    return;
+  }
+  try {
+    const { id } = req.body;
+    const deleteService = await Service.findByIdAndDelete(id);
+    res.status(200).send(deleteService);
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+};
 
+// search by user
 module.exports.getPendingServiceByUser = async (req, res) => {
   try {
     const { email } = req.body;
