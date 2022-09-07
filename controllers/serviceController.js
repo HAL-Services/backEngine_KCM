@@ -106,12 +106,23 @@ module.exports.cancleService = async (req, res) => {
 };
 
 // search by user
-module.exports.getPendingServiceByUser = async (req, res) => {
+module.exports.getServiceByUser = async (req, res) => {
   try {
     const { email } = req.user;
     const allServices = await Service.find({ email });
     res.status(200).send({ allServices });
   } catch (error) {
     res.status(400).send({ error: error.message });
+  }
+};
+
+// search form admin pannel
+module.exports.getServiceForUser = async (req, res) => {
+  if (!req.user.isAdmin) {
+    res.status(403).json("ACCESS DENIED");
+  }
+  try {
+  } catch (error) {
+    res.status(400).json(error.message);
   }
 };

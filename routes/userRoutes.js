@@ -7,6 +7,6 @@ router.post("/users/update", auth, userController.updateProfile);
 router.get("/users/details", auth, userController.getUserDetails);
 router.get("/users/all", auth, userController.getAllUsers);
 router.get("/users/stats", auth, userController.getUserStats);
-
+router.get("/users/:id", auth, userController.getUserById);
 
 module.exports = router;
