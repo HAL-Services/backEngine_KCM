@@ -18,10 +18,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 const PORT = process.env.PORT || 5000;
 try {
-  mongoose.connect(
-    "mongodb+srv://halservices:harshluvjeet10@cluster0.o0zhh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
-    { useNewUrlParser: true, useUnifiedTopology: true }
-  );
+  mongoose.connect(process.env.DATA_BASE_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
 } catch (error) {
   console.log(`Error:${error.message}`);
   process.exit();
