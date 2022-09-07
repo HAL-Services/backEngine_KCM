@@ -34,6 +34,25 @@ module.exports.getAllUsers = async (req, res) => {
   }
 };
 
+// get user by Id
+module.exports.getUserById = async (req, res) => {
+  if (!req.user.isAdmin) {
+    res.status(403).json("ACCESS DENIED");
+    return;
+  }
+  const _id = req.params.id;
+  try {
+    const user = await User.findById(_id);
+    if (!user) {
+      res.status(404).json("NO USER FOUND");
+      return;
+    }
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+};
+
 // get users stats
 module.exports.getUserStats = async (req, res) => {
   if (!req.user.isAdmin) {
