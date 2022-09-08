@@ -9,5 +9,6 @@ router.get("/services/pending", auth, serviceController.getPendingServices);
 router.get("/services/active", auth, serviceController.getActiveServices);
 router.get("/services/completed", auth, serviceController.getCompletedServices);
 router.get("/services/details", auth, serviceController.getServiceByUser);
+router.post("/services/user/details", auth, serviceController.getServiceForUser);
 router.delete("/services/delete", auth, serviceController.cancleService);
 module.exports = router;
