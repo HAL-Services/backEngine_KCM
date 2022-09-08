@@ -84,7 +84,9 @@ module.exports.getCompletedServices = async (req, res) => {
     return;
   }
   try {
-    const completedServices = await Service.find({ booking: "Completed" });
+    const completedServices = await Service.find({ booking: "Completed" })
+      .sort({ _id: -1 })
+      .limit(20);
     res.status(200).send(completedServices);
   } catch (error) {
     res.status(400).json(error.message);
@@ -120,8 +122,14 @@ module.exports.getServiceByUser = async (req, res) => {
 module.exports.getServiceForUser = async (req, res) => {
   if (!req.user.isAdmin) {
     res.status(403).json("ACCESS DENIED");
+    return;
   }
   try {
+    const { email } = req.body;
+    const allServices = await Service.find({ email })
+      .sort({ _id: -1 })
+      .limit(10);
+    res.status(200).json({ allServices });
   } catch (error) {
     res.status(400).json(error.message);
   }
