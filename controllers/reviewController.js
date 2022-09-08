@@ -18,11 +18,11 @@ module.exports.updateReview = async (req, res) => {
     return;
   }
   try {
-    const { id, status } = req.body;
+    const { id, type } = req.body;
     const review = await Review.findOneAndUpdate(
       { _id: id },
       {
-        status,
+        type,
       },
       { new: true }
     );
@@ -48,10 +48,10 @@ module.exports.deleteReview = async (req, res) => {
   }
 };
 
-// to get all the legit reviews
-module.exports.getReviews = async (req, res) => {
+// to get all the good reviews
+module.exports.getOnSiteReviews = async (req, res) => {
   try {
-    const reviews = await Review.find({ status: true });
+    const reviews = await Review.find({ type: "onsite" });
     res.status(200).send(reviews);
   } catch (error) {
     res.status(400).send({ error: error.message });
@@ -65,7 +65,21 @@ module.exports.getPendingReviews = async (req, res) => {
     return;
   }
   try {
-    const reviews = await Review.find({ status: "false" });
+    const reviews = await Review.find({ type: "off" });
+    res.status(200).send(reviews);
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+};
+
+// to get good reviews
+module.exports.getReviews = async (req, res) => {
+  if (!req.user.isAdmin) {
+    res.status(403).json("ACCESS DENIED");
+    return;
+  }
+  try {
+    const reviews = await Review.find({ type: "selected" });
     res.status(200).send(reviews);
   } catch (error) {
     res.status(400).json(error.message);

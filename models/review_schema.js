@@ -13,9 +13,9 @@ const reviewSchema = new mongoose.Schema({
     type: Number,
     default: 5,
   },
-  status: {
-    type: Boolean,
-    default: false,
+  type: {
+    type: String,
+    default: "off",
   },
   image: {
     type: String,
