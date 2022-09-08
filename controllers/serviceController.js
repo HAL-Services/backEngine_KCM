@@ -102,7 +102,7 @@ module.exports.getCompletedServices = async (req, res) => {
   }
   try {
     const completedServices = await Service.find({ booking: "Completed" })
-      .sort({ _id: 1 })
+      .sort({ _id: -1 })
       .limit(20);
     res.status(200).send(completedServices);
   } catch (error) {
@@ -158,9 +158,38 @@ module.exports.getAllLatestServices = async (req, res) => {
     return;
   }
   try {
-    const allServices = await Service.find().sort({ _id: 1 }).limit(10);
+    const allServices = await Service.find().sort({ _id: -1 }).limit(10);
     res.status(200).json({ allServices });
   } catch (error) {
     res.status(400).json(error.message);
+  }
+};
+
+module.exports.uploadBill = async (req, res) => {
+  if (!req.user.isAdmin) {
+    res.status(403).json("ACCESS DENIED");
+    return;
+  }
+  try {
+    const id = req.body.id;
+    const bill = req.file.buffer;
+    const updatedService = await Service.findByIdAndUpdate(id, {
+      bill: bill,
+    });
+
+    res.status(201).json(updatedService);
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+};
+
+module.exports.getBill = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const service = await Service.findById(id);
+    res.set("Content-Type", "image/jpeg");
+    res.send(service.bill);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
   }
 };

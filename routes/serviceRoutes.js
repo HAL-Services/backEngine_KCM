@@ -1,8 +1,16 @@
 const { Router } = require("express");
 const serviceController = require("../controllers/serviceController");
 const auth = require("../middleware/authMiddleware");
+const multer = require("multer");
 const router = Router();
-
+const upload = multer({
+  limits: {
+    filesize: 2000000,
+  },
+  // fileFilter(req, file, cb) {
+  //   cb(undefined, true);
+  // },
+});
 router.post("/services/create", auth, serviceController.createService);
 router.post("/services/update", auth, serviceController.updateServiceStatus);
 router.get("/services/pending", auth, serviceController.getPendingServices);
@@ -20,5 +28,16 @@ router.post(
   auth,
   serviceController.getServiceForUser
 );
+
+router.post(
+  "/services/upload/bill",
+  auth,
+  upload.single("bill"),
+  serviceController.uploadBill,
+  (error, req, res, next) => {
+    res.status(400).json({ error: error.message });
+  }
+);
+router.get("/services/view/:id/bill", serviceController.getBill);
 router.delete("/services/delete", auth, serviceController.cancleService);
 module.exports = router;

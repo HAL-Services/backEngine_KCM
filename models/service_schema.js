@@ -40,7 +40,10 @@ const serviceSchema = new mongoose.Schema(
       type: String,
       default: "Pending",
     },
-    
+    bill: {
+      type: Buffer,
+      required: false,
+    },
   },
   { timestamps: true }
 );
