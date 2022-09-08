@@ -9,6 +9,7 @@ router.get("/services/pending", auth, serviceController.getPendingServices);
 router.get("/services/active", auth, serviceController.getActiveServices);
 router.get("/services/completed", auth, serviceController.getCompletedServices);
 router.get("/services/details", auth, serviceController.getServiceByUser);
+router.get("/services/count", auth, serviceController.getCountofServices);
 router.get(
   "/services/latest/all",
   auth,

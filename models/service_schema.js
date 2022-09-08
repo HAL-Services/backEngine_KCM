@@ -40,6 +40,7 @@ const serviceSchema = new mongoose.Schema(
       type: String,
       default: "Pending",
     },
+    
   },
   { timestamps: true }
 );

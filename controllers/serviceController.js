@@ -28,6 +28,23 @@ module.exports.createService = async (req, res) => {
     res.status(400).send({ error: error.message });
   }
 };
+// get count of services
+module.exports.getCountofServices = async (req, res) => {
+  if (!req.user.isAdmin) {
+    res.status(403).json("ACCESS DENIED");
+    return;
+  }
+  try {
+    const allServices = await Service.find();
+    const pending = allServices.filter((d) => d.booking === "Pending");
+    const active = allServices.filter((d) => d.booking === "Active");
+    res
+      .status(200)
+      .json({ pendingCount: pending.length, activeCount: active.length });
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+};
 // update service status
 module.exports.updateServiceStatus = async (req, res) => {
   if (!req.user.isAdmin) {
@@ -85,7 +102,7 @@ module.exports.getCompletedServices = async (req, res) => {
   }
   try {
     const completedServices = await Service.find({ booking: "Completed" })
-      .sort({ _id: -1 })
+      .sort({ _id: 1 })
       .limit(20);
     res.status(200).send(completedServices);
   } catch (error) {
@@ -111,7 +128,7 @@ module.exports.cancleService = async (req, res) => {
 module.exports.getServiceByUser = async (req, res) => {
   try {
     const { email } = req.user;
-    const allServices = await Service.find({ email });
+    const allServices = await Service.find({ email }).sort({ _id: -1 });
     res.status(200).send({ allServices });
   } catch (error) {
     res.status(400).send({ error: error.message });
@@ -141,7 +158,7 @@ module.exports.getAllLatestServices = async (req, res) => {
     return;
   }
   try {
-    const allServices = await Service.find().sort({ _id: -1 }).limit(10);
+    const allServices = await Service.find().sort({ _id: 1 }).limit(10);
     res.status(200).json({ allServices });
   } catch (error) {
     res.status(400).json(error.message);
