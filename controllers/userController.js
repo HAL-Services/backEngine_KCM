@@ -15,7 +15,18 @@ module.exports.getUserDetails = async (req, res) => {
     res.status(404).send({ error: err.message, message: "User not found" });
   }
 };
-
+module.exports.getCountOfUsers = async (req, res) => {
+  if (!req.user.isAdmin) {
+    res.status(403).json("ACCESS DENIED");
+    return;
+  }
+  try {
+    const allUsers = await User.find();
+    res.status(200).json({ count: allUsers.length });
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+};
 // get all users
 module.exports.getAllUsers = async (req, res) => {
   if (!req.user.isAdmin) {

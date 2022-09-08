@@ -28,6 +28,23 @@ module.exports.createService = async (req, res) => {
     res.status(400).send({ error: error.message });
   }
 };
+// get count of services
+module.exports.getCountofServices = async (req, res) => {
+  if (!req.user.isAdmin) {
+    res.status(403).json("ACCESS DENIED");
+    return;
+  }
+  try {
+    const allServices = await Service.find();
+    const pending = allServices.filter((d) => d.booking === "Pending");
+    const active = allServices.filter((d) => d.booking === "Active");
+    res
+      .status(200)
+      .json({ pendingCount: pending.length, activeCount: active.length });
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+};
 // update service status
 module.exports.updateServiceStatus = async (req, res) => {
   if (!req.user.isAdmin) {
@@ -111,7 +128,7 @@ module.exports.cancleService = async (req, res) => {
 module.exports.getServiceByUser = async (req, res) => {
   try {
     const { email } = req.user;
-    const allServices = await Service.find({ email });
+    const allServices = await Service.find({ email }).sort({ _id: -1 });
     res.status(200).send({ allServices });
   } catch (error) {
     res.status(400).send({ error: error.message });
@@ -145,5 +162,34 @@ module.exports.getAllLatestServices = async (req, res) => {
     res.status(200).json({ allServices });
   } catch (error) {
     res.status(400).json(error.message);
+  }
+};
+
+module.exports.uploadBill = async (req, res) => {
+  if (!req.user.isAdmin) {
+    res.status(403).json("ACCESS DENIED");
+    return;
+  }
+  try {
+    const id = req.body.id;
+    const bill = req.file.buffer;
+    const updatedService = await Service.findByIdAndUpdate(id, {
+      bill: bill,
+    });
+
+    res.status(201).json(updatedService);
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+};
+
+module.exports.getBill = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const service = await Service.findById(id);
+    res.set("Content-Type", "image/jpeg");
+    res.send(service.bill);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
   }
 };
