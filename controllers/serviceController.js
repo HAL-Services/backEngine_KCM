@@ -134,3 +134,16 @@ module.exports.getServiceForUser = async (req, res) => {
     res.status(400).json(error.message);
   }
 };
+
+module.exports.getAllLatestServices = async (req, res) => {
+  if (!req.user.isAdmin) {
+    res.status(403).json("ACCESS DENIED");
+    return;
+  }
+  try {
+    const allServices = await Service.find().sort({ _id: -1 }).limit(10);
+    res.status(200).json({ allServices });
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+};
