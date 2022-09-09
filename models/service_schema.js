@@ -31,6 +31,7 @@ const serviceSchema = new mongoose.Schema(
     },
     location: {
       type: String,
+      required: true,
     },
     booking: {
       type: String,
