@@ -3,16 +3,8 @@ const Service = require("../models/service_schema");
 // create new  service
 module.exports.createService = async (req, res) => {
   try {
-    const {
-      email,
-      location,
-      carNumber,
-      carModel,
-      mobile,
-      username,
-      time,
-      date,
-    } = req.body;
+    const { email, location, carNumber, carModel, mobile, username, date } =
+      req.body;
     const service = await Service.create({
       email,
       username,
@@ -20,7 +12,6 @@ module.exports.createService = async (req, res) => {
       carNumber,
       carModel,
       mobile,
-      time,
       date,
     });
     res.status(201).json(service);
