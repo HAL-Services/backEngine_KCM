@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const morgan = require("morgan");
 const env = require("dotenv");
+const helmet = require("helmet");
 // importing routes
 const authRoutes = require("./routes/authRoutes");
 const reviewRoutes = require("./routes/reviewRoute");
@@ -15,6 +16,7 @@ const app = express();
 app.use(cors());
 app.use(morgan("tiny"));
 app.use(express.json());
+app.use(helmet());
 app.use(express.urlencoded({ extended: true }));
 const PORT = process.env.PORT || 5000;
 try {
