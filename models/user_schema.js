@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { isEmail } = require("validator");
+const validator = require("validator");
 const env = require("dotenv");
 env.config();
 const userSchema = new mongoose.Schema(
@@ -17,9 +17,14 @@ const userSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      validate: [isEmail, "invalid email"],
       unique: true,
       trim: true,
+      required: [true, "Please enter a valid email"],
+      validate(value) {
+        if (!validator.isEmail(value)) {
+          throw new Error("Email is invalid");
+        }
+      },
     },
     password: {
       type: String,
@@ -57,11 +62,11 @@ userSchema.methods.generateAuthToken = async function () {
 userSchema.statics.findByCredentials = async (email, password) => {
   const user = await User.findOne({ email });
   if (!user) {
-    throw new Error("Unable to login");
+    throw new Error("Email Invalid");
   }
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
-    throw new Error("Unable to login");
+    throw new Error("Password Invalid");
   }
   return user;
 };

@@ -9,5 +9,7 @@ router.get("/users/count", auth, userController.getCountOfUsers);
 router.get("/users/all", auth, userController.getAllUsers);
 router.get("/users/stats", auth, userController.getUserStats);
 router.get("/users/:id", auth, userController.getUserById);
+router.get("/users/forgot", userController.forgotPassword);
+router.post("/users/check", userController.checkPassword);
 
 module.exports = router;
