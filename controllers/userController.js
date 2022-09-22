@@ -142,7 +142,6 @@ module.exports.forgotPassword = async (req, res) => {
   try {
     const email = req.body.email;
     const user = await User.findOne({ email: email });
-    console.log(user);
     if (!user) throw new Error("Please register first");
     const id = user._id.toHexString();
     const token = crypto.randomBytes(64).toString("hex");
@@ -157,17 +156,13 @@ module.exports.forgotPassword = async (req, res) => {
 module.exports.checkPassword = async (req, res) => {
   try {
     const { id } = req.body;
-    const user = await User.findById(id);
-    if (req.body.newPass) {
-      req.body.newPass = await bcrypt.hash(req.body.newPass, 8);
-      user.password = req.body.newPass;
-      user.save(function (err) {
-        if (err) {
-          console.error("ERROR!");
-        }
-      });
-      return res.status(200).send({ message: "Successfully changed password" });
-    }
+    const password = await bcrypt.hash(req.body.newPass, 8);
+    const user = await User.findByIdAndUpdate(
+      { _id: id },
+      { password: password },
+      { new: true }
+    );
+    return res.status(200).send({ message: "Successfully changed password" });
   } catch (err) {
     res.status(401).send({ error: err.message });
   }
