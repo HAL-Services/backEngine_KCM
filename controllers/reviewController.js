@@ -52,6 +52,7 @@ module.exports.deleteReview = async (req, res) => {
 module.exports.getOnSiteReviews = async (req, res) => {
   try {
     const reviews = await Review.find({ type: "onsite" });
+    console.log(reviews)
     res.status(200).send(reviews);
   } catch (error) {
     res.status(400).send({ error: error.message });
